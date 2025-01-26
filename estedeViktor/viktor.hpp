@@ -32,11 +32,9 @@ namespace estede {
 
 		}
 		viktor(const viktor& src) {//copy constructor v(src);
-			if (this->capacity < src.capacity) {
-				this->capacity = src.capacity;
-			}
-			this->size = src.size;
+			this->capacity = src.capacity;
 			this->elements = new T[capacity];
+			this->size = src.size;
 			for (int i = 0; i < size; i++) {
 				this->elements[i] = src.elements[i];
 			}
@@ -61,7 +59,16 @@ namespace estede {
 		const T& operator[](size_t index) const {//get element at index
 			return elements[index];
 		}
-		viktor& operator=(const viktor& src) {//todo
+		viktor& operator=(const viktor& src) {//assigns the elements, size, and capacity (if dest is lower) from the right hand side vector
+			if (this->capacity < src.capacity) {
+				this->capacity = src.capacity;
+			}
+			this->size = src.size;
+			delete[] elements;
+			this->elements = new T[capacity];
+			for (int i = 0; i < size; i++) {
+				this->elements[i] = src.elements[i];
+			}
 
 		}
 		T& at(size_t index) {//same as operator[] but with bounds check (throws std::out_of_range)
@@ -84,9 +91,13 @@ namespace estede {
 		void PushBack(const T& element) {//Push element after the last
 			if (size == capacity) {
 				#ifdef _MSC_VER//MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
+				if (capacity < 2)
+					capacity = 2;
 				capacity *= 1.5;
 				T* temp = new T[capacity];
 				#else
+				if (capacity < 2)
+					capacity = 2;
 				capacity *= 2;
 				T* temp = new T[capacity];
 				#endif
@@ -105,18 +116,61 @@ namespace estede {
 			else
 				throw std::out_of_range("why dude");
 		}
-		void Erase(size_t index);//todo
-		void Insert(size_t index);//todo
-		void Resize(size_t newCapacity) {//Resizes the array
-			if (newCapacity >= capacity)
-				capacity = newCapacity;
+		void Erase(size_t index) {
+			for (int i = index; i < size-1; i++) {
+				elements[i] = elements[i + 1];
+			}
+			size--;
+		}//erase element at index
+		void Insert(size_t index, const T& element) {
+			if (size == capacity) {
+				#ifdef _MSC_VER//MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
+				if (capacity < 2)
+					capacity = 2;
+				capacity *= 1.5;
+				T* temp = new T[capacity];
+				#else
+				if (capacity < 2)
+					capacity = 2;
+				capacity *= 2;
+				T* temp = new T[capacity];
+				#endif
+				for (int i = 0; i < size; i++) {
+					temp[i] = elements[i];
+				}
+				delete[] elements;
+				elements = temp;
+			}
+			for (int i = index; i < size; i++) {
+				elements[i + 1] = elements[i];
+			}
+			elements[index] = element;
+		}
+		void Clear() {//clears array (doesn't do any fancy deallocating, assumes the allocated space may be still used in the future)
+			size = 0;
+		}
+		void Resize(size_t newSize) {//resizes the array, throws std::out_of_range when less than size
+			if (newSize >= size) {
+				this->capacity = newSize;
+				T* temp = new T[capacity];
+				for (int i = 0; i < size; i++) {
+					temp[i] = elements[i];
+				}
+				delete[] elements;
+				elements = temp;
+			}
 			else
 				throw std::out_of_range("Viktor resize failed");
 		}
-
-
-
-
+		void ShrinkToFit() {//shrinks capacity to size
+			capacity = size;
+			T* temp = new T[capacity];
+			for (int i = 0; i < size; i++) {
+				temp[i] = elements[i];
+			}
+			delete[] elements;
+			elements = temp;
+		}
 	};
 }
 #endif
