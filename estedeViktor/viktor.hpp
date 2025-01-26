@@ -69,7 +69,7 @@ namespace estede {
 			for (int i = 0; i < size; i++) {
 				this->elements[i] = src.elements[i];
 			}
-
+			return *this;
 		}
 		T& at(size_t index) {//same as operator[] but with bounds check (throws std::out_of_range)
 			if (index >= capacity) {
