@@ -2,7 +2,7 @@
 #ifndef VIKTOR_HPP
 #define VIKTOR_HPP
 #include <stdexcept>
-constexpr size_t STANDARD_VEC_SIZE = 10;
+constexpr size_t STANDARD_VEC_SIZE = 10ll;
 namespace estede {
 	template <typename T>
 	class viktor {
@@ -96,7 +96,7 @@ namespace estede {
 				capacity *= 1.5;
 				T* temp = new T[capacity];
 				#else
-				if (capacity < 2)
+				if(capacity < 2)
 					capacity = 2;
 				capacity *= 2;
 				T* temp = new T[capacity];
@@ -116,13 +116,13 @@ namespace estede {
 			else
 				throw std::out_of_range("why dude");
 		}
-		void Erase(size_t index) {
-			for (int i = index; i < size-1; i++) {
+		void Erase(size_t index) {//erase element at index
+			for (int i = index; i < size-1ll; i++) {
 				elements[i] = elements[i + 1];
 			}
 			size--;
-		}//erase element at index
-		void Insert(size_t index, const T& element) {
+		}
+		void Insert(size_t index, const T& element) {//inserts element at index
 			if (size == capacity) {
 				#ifdef _MSC_VER//MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
 				if (capacity < 2)
@@ -142,14 +142,15 @@ namespace estede {
 				elements = temp;
 			}
 			for (int i = index; i < size; i++) {
-				elements[i + 1] = elements[i];
+				elements[i + 1ll] = elements[i];
 			}
 			elements[index] = element;
+			size++;
 		}
 		void Clear() {//clears array (doesn't do any fancy deallocating, assumes the allocated space may be still used in the future)
 			size = 0;
 		}
-		void Resize(size_t newSize) {//resizes the array, throws std::out_of_range when less than size
+		void Resize(size_t newSize) {//resizes the array, throws std::out_of_range when less than current size
 			if (newSize >= size) {
 				this->capacity = newSize;
 				T* temp = new T[capacity];
