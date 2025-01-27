@@ -2,6 +2,7 @@
 #ifndef VIKTOR_HPP
 #define VIKTOR_HPP
 #include <stdexcept>
+#include <initializer_list>
 constexpr size_t STANDARD_VEC_SIZE = 10ll;
 namespace estede {
 	template <typename T>
@@ -26,19 +27,30 @@ namespace estede {
 			this->size = length;
 			this->capacity = length*2;
 			this->elements = new T[capacity];
-			for (int i = 0; i < size; i++) {
+			for (size_t i = 0; i < size; i++) {
 				elements[i] = base;
 			}
 
 		}
-		viktor(const viktor& src) {//copy constructor v(src);
+		viktor(const viktor& src) {//copy constructor v(src)
 			this->capacity = src.capacity;
 			this->elements = new T[capacity];
 			this->size = src.size;
-			for (int i = 0; i < size; i++) {
+			for (size_t i = 0; i < size; i++) {
 				this->elements[i] = src.elements[i];
 			}
 		}
+		/* todo: initializer list
+		I'm too stupid for this shit 
+		viktor(std::initializer_list<T> list) {
+			this->size = size_t(list.size());
+			this->capacity = this->size * 2;
+			this->elements = new T[capacity];
+			for (size_t i = 0; i < size; i++) {
+				elements[i] = std::data(list);
+			}
+
+		}*/
 		~viktor() {//cleans up the heap allocated array
 			delete[] elements;
 		}
@@ -59,14 +71,14 @@ namespace estede {
 		const T& operator[](size_t index) const {//get element at index
 			return elements[index];
 		}
-		viktor& operator=(const viktor& src) {//assigns the elements, size, and capacity (if dest is lower) from the right hand side vector
+		viktor& operator=(const viktor& src) {//assigns the elements, size, and capacity (if dest is lower) from the right hand side viktor
 			if (this->capacity < src.capacity) {
 				this->capacity = src.capacity;
 			}
 			this->size = src.size;
 			delete[] elements;
 			this->elements = new T[capacity];
-			for (int i = 0; i < size; i++) {
+			for (size_t i = 0; i < size; i++) {
 				this->elements[i] = src.elements[i];
 			}
 			return *this;
@@ -101,7 +113,7 @@ namespace estede {
 				capacity *= 2;
 				T* temp = new T[capacity];
 				#endif
-				for (int i = 0; i < size; i++) {
+				for (size_t i = 0; i < size; i++) {
 					temp[i] = elements[i];
 				}
 				delete[] elements;
@@ -117,7 +129,7 @@ namespace estede {
 				throw std::out_of_range("why dude");
 		}
 		void Erase(size_t index) {//erase element at index
-			for (int i = index; i < size-1ll; i++) {
+			for (size_t i = index; i < size-1ll; i++) {
 				elements[i] = elements[i + 1];
 			}
 			size--;
@@ -135,13 +147,13 @@ namespace estede {
 				capacity *= 2;
 				T* temp = new T[capacity];
 				#endif
-				for (int i = 0; i < size; i++) {
+				for (size_t i = 0; i < size; i++) {
 					temp[i] = elements[i];
 				}
 				delete[] elements;
 				elements = temp;
 			}
-			for (int i = index; i < size; i++) {
+			for (size_t i = index; i < size; i++) {
 				elements[i + 1ll] = elements[i];
 			}
 			elements[index] = element;
@@ -150,11 +162,18 @@ namespace estede {
 		void Clear() {//clears array (doesn't do any fancy deallocating, assumes the allocated space may be still used in the future)
 			size = 0;
 		}
+		void CleanUp() {//deallocates the whole array
+			size = 0;
+			capacity = 0;
+			T* temp = new T[capacity];
+			delete[] elements;
+			elements = temp;
+		}
 		void Resize(size_t newSize) {//resizes the array, throws std::out_of_range when less than current size
 			if (newSize >= size) {
 				this->capacity = newSize;
 				T* temp = new T[capacity];
-				for (int i = 0; i < size; i++) {
+				for (size_t i = 0; i < size; i++) {
 					temp[i] = elements[i];
 				}
 				delete[] elements;
@@ -166,7 +185,7 @@ namespace estede {
 		void ShrinkToFit() {//shrinks capacity to size
 			capacity = size;
 			T* temp = new T[capacity];
-			for (int i = 0; i < size; i++) {
+			for (size_t i = 0; i < size; i++) {
 				temp[i] = elements[i];
 			}
 			delete[] elements;

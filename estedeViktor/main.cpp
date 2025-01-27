@@ -20,6 +20,5 @@ int main(int argc, char** argv) {
 	std::cout << "\n\n\n";
 	std::cout << vec2.at(3) << ' ' << vec2.getsize() << ' ' << vec2.getcapacity() << '\n';
 
-
 	return 0;
 }
