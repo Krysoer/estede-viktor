@@ -40,17 +40,17 @@ namespace estede {
 				this->elements[i] = src.elements[i];
 			}
 		}
-		/* todo: initializer list
-		I'm too stupid for this shit 
 		viktor(std::initializer_list<T> list) {
-			this->size = size_t(list.size());
+			this->size = list.size();
 			this->capacity = this->size * 2;
 			this->elements = new T[capacity];
-			for (size_t i = 0; i < size; i++) {
-				elements[i] = std::data(list);
+			size_t iter = 0;
+			for (const T& val : list) {
+				elements[iter] = val;
+				iter++;
 			}
 
-		}*/
+		}
 		~viktor() {//cleans up the heap allocated array
 			delete[] elements;
 		}

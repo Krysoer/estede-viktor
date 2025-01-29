@@ -19,6 +19,9 @@ int main(int argc, char** argv) {
 	estede::viktor<float> vec2 = vec;
 	std::cout << "\n\n\n";
 	std::cout << vec2.at(3) << ' ' << vec2.getsize() << ' ' << vec2.getcapacity() << '\n';
-
+	estede::viktor<int> abc = { 2,3,4,5 };
+	for (int i = 0; i < abc.getsize(); i++) {
+		std::cout << abc.at(i) << '\n';
+	}
 	return 0;
 }
