@@ -20,8 +20,16 @@ int main(int argc, char** argv) {
 	std::cout << "\n\n\n";
 	std::cout << vec2.at(3) << ' ' << vec2.getsize() << ' ' << vec2.getcapacity() << '\n';
 	estede::viktor<int> abc = { 2,3,4,5 };
+	
+	std::cout << "Size: " << abc.getsize() << " Capacity: " << abc.getcapacity() << '\n';
 	for (int i = 0; i < abc.getsize(); i++) {
 		std::cout << abc.at(i) << '\n';
 	}
+	abc.ShrinkToFit();
+	std::cout << "Size: " << abc.getsize() << " Capacity: " << abc.getcapacity() << '\n';
+	for (int i = 0; i < abc.getsize(); i++) {
+		std::cout << abc.at(i) << '\n';
+	}
+
 	return 0;
 }

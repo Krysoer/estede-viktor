@@ -10,7 +10,7 @@ namespace estede {
 	private:
 		size_t capacity;//number of spaces allocated for type T
 		size_t size;//number of populated spaces
-		T* elements;//heap allocated c-style array
+		T* elements;//ptr to heap allocated c-style array
 	public:
 		viktor() {//default constructor, allocates 10 spaces for type T
 			this->size = 0;
@@ -84,7 +84,7 @@ namespace estede {
 			return *this;
 		}
 		T& at(size_t index) {//same as operator[] but with bounds check (throws std::out_of_range)
-			if (index >= capacity) {
+			if (index >= size) {
 				throw std::out_of_range("Attempted to access index out of bounds");
 			}
 			else [[likely]] {
@@ -101,7 +101,7 @@ namespace estede {
 		}
 
 		void PushBack(const T& element) {//Push element after the last
-			if (size == capacity) {
+			if (size == capacity) [[unlikely]]{
 				#ifdef _MSC_VER//MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
 				if (capacity < 2)
 					capacity = 2;
@@ -162,7 +162,7 @@ namespace estede {
 		void Clear() {//clears array (doesn't do any fancy deallocating, assumes the allocated space may be still used in the future)
 			size = 0;
 		}
-		void CleanUp() {//deallocates the whole array
+		void ClearButFancy() {//deallocates the whole array
 			size = 0;
 			capacity = 0;
 			T* temp = new T[capacity];
