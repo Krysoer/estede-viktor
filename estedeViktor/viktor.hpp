@@ -13,21 +13,21 @@ namespace estede {
 		T* elements;//ptr to heap allocated c-style array
 	public:
 		viktor() {//default constructor, allocates 10 spaces for type T
-			this->size = 0;
+			this->size = 0ll;
 			this->capacity = STANDARD_VEC_SIZE;
 			this->elements = new T[capacity];
 		}
 		viktor(size_t capacity) {//allocates (capacity) spaces for type T
-			this->size = 0;
+			this->size = 0ll;
 			this->capacity = capacity;
 			this->elements = new T[capacity];
 
 		}
 		viktor(size_t length, const T& base) {//allocates (capacity) spaces for type T and populates them with (base)
 			this->size = length;
-			this->capacity = length*2;
+			this->capacity = length*2ll;
 			this->elements = new T[capacity];
-			for (size_t i = 0; i < size; i++) {
+			for (size_t i = 0ll; i < size; i++) {
 				elements[i] = base;
 			}
 
@@ -36,15 +36,15 @@ namespace estede {
 			this->capacity = src.capacity;
 			this->elements = new T[capacity];
 			this->size = src.size;
-			for (size_t i = 0; i < size; i++) {
-				this->elements[i] = src.elements[i];
+			for (size_t i = 0ll; i < size; i++) {
+				elements[i] = src.elements[i];
 			}
 		}
 		viktor(std::initializer_list<T> list) {
 			this->size = list.size();
-			this->capacity = this->size * 2;
+			this->capacity = this->size * 2ll;
 			this->elements = new T[capacity];
-			size_t iter = 0;
+			size_t iter = 0ll;
 			for (const T& val : list) {
 				elements[iter] = val;
 				iter++;
@@ -56,7 +56,7 @@ namespace estede {
 		}
 
 		bool empty() const {//returns true if no spaces are populated else returns false
-			return size == 0;
+			return size == 0ll;
 		}
 		size_t getsize() const {//returns the number of populated spaces
 			return size;
@@ -78,7 +78,7 @@ namespace estede {
 			this->size = src.size;
 			delete[] elements;
 			this->elements = new T[capacity];
-			for (size_t i = 0; i < size; i++) {
+			for (size_t i = 0ll; i < size; i++) {
 				this->elements[i] = src.elements[i];
 			}
 			return *this;
@@ -103,17 +103,17 @@ namespace estede {
 		void PushBack(const T& element) {//Push element after the last
 			if (size == capacity) [[unlikely]]{
 				#ifdef _MSC_VER//MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
-				if (capacity < 2)
-					capacity = 2;
+				if (capacity < 2ll)
+					capacity = 2ll;
 				capacity *= 1.5;
 				T* temp = new T[capacity];
 				#else
-				if(capacity < 2)
-					capacity = 2;
-				capacity *= 2;
+				if(capacity < 2ll)
+					capacity = 2ll;
+				capacity *= 2ll;
 				T* temp = new T[capacity];
 				#endif
-				for (size_t i = 0; i < size; i++) {
+				for (size_t i = 0ll; i < size; i++) {
 					temp[i] = elements[i];
 				}
 				delete[] elements;
@@ -123,31 +123,31 @@ namespace estede {
 			size++;
 		}
 		void PopBack() {//Remove last element (doesn't do any fancy deallocating, assumes the index may be still used in the future)
-			if (size > 0)
+			if (size > 0ll) [[likely]]
 				size--;
 			else
 				throw std::out_of_range("why dude");
 		}
 		void Erase(size_t index) {//erase element at index
 			for (size_t i = index; i < size-1ll; i++) {
-				elements[i] = elements[i + 1];
+				elements[i] = elements[i + 1ll];
 			}
 			size--;
 		}
 		void Insert(size_t index, const T& element) {//inserts element at index
-			if (size == capacity) {
+			if (size == capacity) [[unlikely]]{
 				#ifdef _MSC_VER//MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
-				if (capacity < 2)
-					capacity = 2;
+				if (capacity < 2ll)
+					capacity = 2ll;
 				capacity *= 1.5;
 				T* temp = new T[capacity];
 				#else
-				if (capacity < 2)
-					capacity = 2;
-				capacity *= 2;
+				if (capacity < 2ll)
+					capacity = 2ll;
+				capacity *= 2ll;
 				T* temp = new T[capacity];
 				#endif
-				for (size_t i = 0; i < size; i++) {
+				for (size_t i = 0ll; i < size; i++) {
 					temp[i] = elements[i];
 				}
 				delete[] elements;
@@ -163,17 +163,17 @@ namespace estede {
 			size = 0;
 		}
 		void ClearButFancy() {//deallocates the whole array
-			size = 0;
-			capacity = 0;
+			size = 0ll;
+			capacity = 0ll;
 			T* temp = new T[capacity];
 			delete[] elements;
 			elements = temp;
 		}
 		void Resize(size_t newSize) {//resizes the array, throws std::out_of_range when less than current size
-			if (newSize >= size) {
+			if (newSize >= size) [[likely]]{
 				this->capacity = newSize;
 				T* temp = new T[capacity];
-				for (size_t i = 0; i < size; i++) {
+				for (size_t i = 0ll; i < size; i++) {
 					temp[i] = elements[i];
 				}
 				delete[] elements;
@@ -185,7 +185,7 @@ namespace estede {
 		void ShrinkToFit() {//shrinks capacity to size
 			capacity = size;
 			T* temp = new T[capacity];
-			for (size_t i = 0; i < size; i++) {
+			for (size_t i = 0ll; i < size; i++) {
 				temp[i] = elements[i];
 			}
 			delete[] elements;
