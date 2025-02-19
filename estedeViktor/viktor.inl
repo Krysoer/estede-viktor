@@ -1,26 +1,26 @@
 // Constructors and Destructor
 template <typename T>
-estede::viktor<T>::viktor() : size(0ll), capacity(STANDARD_VEC_SIZE), elements(new T[capacity]) {}
+estede::viktor<T>::viktor() : size(0ll), capacity(STANDARD_VEC_SIZE), elements(new T[STANDARD_VEC_SIZE]) {}
 
 template <typename T>
 estede::viktor<T>::viktor(size_t capacity) : size(0ll), capacity(capacity), elements(new T[capacity]) {}
 
 template <typename T>
-estede::viktor<T>::viktor(size_t length, const T& base) : size(length), capacity(length * 2ll), elements(new T[capacity]) {
+estede::viktor<T>::viktor(size_t length, const T& base) : size(length), capacity(length * 2ll), elements(new T[length * 2ll]) {
     for (size_t i = 0ll; i < size; i++) {
         elements[i] = base;
     }
 }
 
 template <typename T>
-estede::viktor<T>::viktor(const viktor& src) : capacity(src.capacity), size(src.size), elements(new T[capacity]) {
+estede::viktor<T>::viktor(const viktor& src) : capacity(src.capacity), size(src.size), elements(new T[src.capacity]) {
     for (size_t i = 0ll; i < size; i++) {
         elements[i] = src.elements[i];
     }
 }
 
 template <typename T>
-estede::viktor<T>::viktor(std::initializer_list<T> list) : size(list.size()), capacity(list.size() * 2), elements(new T[capacity]) {
+estede::viktor<T>::viktor(std::initializer_list<T> list) : size(list.size()), capacity(list.size() * 2), elements(new T[list.size() * 2ll]) {
     size_t iter = 0ll;
     for (const T& val : list) {
         elements[iter] = val;
