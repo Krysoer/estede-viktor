@@ -18,8 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="viktor.hpp">
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="viktor.hpp">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="viktor.inl">
       <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
+    </None>
   </ItemGroup>
 </Project>

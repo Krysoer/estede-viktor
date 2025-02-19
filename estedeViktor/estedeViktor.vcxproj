@@ -129,7 +129,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="viktor.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="viktor.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="viktor.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
