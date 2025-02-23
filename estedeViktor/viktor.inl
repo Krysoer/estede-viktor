@@ -62,7 +62,7 @@ const T& estede::viktor<T>::operator[](size_t index) const {
 
 template <typename T>
 T& estede::viktor<T>::at(size_t index) {
-    if (index >= capacity) {
+    if (index >= size) {
         throw std::out_of_range("Attempted to access index out of bounds");
     }
     else [[likely]] {
