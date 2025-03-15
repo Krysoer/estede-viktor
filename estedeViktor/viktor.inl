@@ -35,33 +35,33 @@ estede::viktor<T>::~viktor() {
 
 // Capacity and Size
 template <typename T>
-bool estede::viktor<T>::empty() const {
+constexpr bool estede::viktor<T>::empty() const noexcept{
     return size == 0ll;
 }
 
 template <typename T>
-size_t estede::viktor<T>::getsize() const {
+constexpr size_t estede::viktor<T>::getsize() const noexcept{
     return size;
 }
 
 template <typename T>
-size_t estede::viktor<T>::getcapacity() const {
+constexpr size_t estede::viktor<T>::getcapacity() const noexcept{
     return capacity;
 }
 
 // Element Access
 template <typename T>
-T& estede::viktor<T>::operator[](size_t index) {
+constexpr T& estede::viktor<T>::operator[](size_t index) {
     return elements[index];
 }
 
 template <typename T>
-const T& estede::viktor<T>::operator[](size_t index) const {
+constexpr const T& estede::viktor<T>::operator[](size_t index) const {
     return elements[index];
 }
 
 template <typename T>
-T& estede::viktor<T>::at(size_t index) {
+constexpr T& estede::viktor<T>::at(size_t index) {
     if (index >= capacity) {
         throw std::out_of_range("Attempted to access index out of bounds");
     }
@@ -71,7 +71,7 @@ T& estede::viktor<T>::at(size_t index) {
 }
 
 template <typename T>
-const T& estede::viktor<T>::at(size_t index) const {
+constexpr const T& estede::viktor<T>::at(size_t index) const {
     if (index >= size) {
         throw std::out_of_range("Attempted to access index out of bounds");
     }
@@ -82,7 +82,7 @@ const T& estede::viktor<T>::at(size_t index) const {
 
 // Modifiers
 template <typename T>
-void estede::viktor<T>::PushBack(const T& element) {
+constexpr void estede::viktor<T>::PushBack(const T& element) {
     if (size == capacity) [[unlikely]] {
         // MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
         #ifdef _MSC_VER
@@ -107,7 +107,7 @@ void estede::viktor<T>::PushBack(const T& element) {
 }
 
 template <typename T>
-void estede::viktor<T>::PopBack() {
+constexpr void estede::viktor<T>::PopBack() {
     if (size > 0ll) [[likely]] {
         size--;
     }
@@ -117,7 +117,7 @@ void estede::viktor<T>::PopBack() {
 }
 
 template <typename T>
-void estede::viktor<T>::Erase(size_t index) {
+constexpr void estede::viktor<T>::Erase(size_t index) {
     for (size_t i = index; i < size - 1ll; i++) {
         elements[i] = elements[i + 1ll];
     }
@@ -125,7 +125,7 @@ void estede::viktor<T>::Erase(size_t index) {
 }
 
 template <typename T>
-void estede::viktor<T>::Insert(size_t index, const T& element) {
+constexpr void estede::viktor<T>::Insert(size_t index, const T& element) {
     if (size == capacity) [[unlikely]] {
         // MSVC resizes the array by 1.5 times while most other vector implementations (clang, GCC) resize by 2x
         #ifdef _MSC_VER
@@ -153,12 +153,12 @@ void estede::viktor<T>::Insert(size_t index, const T& element) {
 }
 
 template <typename T>
-void estede::viktor<T>::Clear() {
+constexpr void estede::viktor<T>::Clear() noexcept{
     size = 0;
 }
 
 template <typename T>
-void estede::viktor<T>::ClearButFancy() {
+constexpr void estede::viktor<T>::ClearButFancy() {
     size = 0ll;
     capacity = 0ll;
     T* temp = new T[capacity];
@@ -167,7 +167,7 @@ void estede::viktor<T>::ClearButFancy() {
 }
 
 template <typename T>
-void estede::viktor<T>::Resize(size_t newSize) {
+constexpr void estede::viktor<T>::Resize(size_t newSize) {
     if (newSize >= size) [[likely]] {
         capacity = newSize;
         T* temp = new T[capacity];
@@ -183,7 +183,7 @@ void estede::viktor<T>::Resize(size_t newSize) {
 }
 
 template <typename T>
-void estede::viktor<T>::ShrinkToFit() {
+constexpr void estede::viktor<T>::ShrinkToFit() {
     capacity = size;
     T* temp = new T[capacity];
     for (size_t i = 0ll; i < size; i++) {
@@ -192,10 +192,16 @@ void estede::viktor<T>::ShrinkToFit() {
     delete[] elements;
     elements = temp;
 }
+template <typename T>
+constexpr void estede::viktor<T>::SwapViktor(estede::viktor<T>& other) noexcept{
+    std::swap(this->capacity, other.capacity);
+    std::swap(this->size, other.size);
+    std::swap(this->elements, other.elements);
+}
 
 // Assignment Operator
 template <typename T>
-estede::viktor<T>& estede::viktor<T>::operator=(const viktor& src) {
+constexpr estede::viktor<T>& estede::viktor<T>::operator=(const viktor& src) {
     if (this->capacity < src.capacity) {
         this->capacity = src.capacity;
     }
@@ -206,4 +212,35 @@ estede::viktor<T>& estede::viktor<T>::operator=(const viktor& src) {
         this->elements[i] = src.elements[i];
     }
     return *this;
+}
+//Algorithms
+template <typename T>
+constexpr void estede::viktor<T>::BubbleSort() noexcept {
+    bool swapped{};
+    for (size_t i = 0; i < getsize() - 1; i++) {
+        swapped = false;
+        for (size_t j = 0; j < getsize() - i - 1; j++) {
+            if (elements[j] > elements[j + 1]) {
+                std::swap(elements[j], elements[j + 1]);
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            return;
+    }
+}
+template <typename T>
+constexpr void estede::viktor<T>::BubbleRsort() noexcept {
+    bool swapped{};
+    for (size_t i = 0; i < getsize() - 1; i++) {
+        swapped = false;
+        for (size_t j = 0; j < getsize() - i - 1; j++) {
+            if (elements[j] < elements[j + 1]) {
+                std::swap(elements[j], elements[j + 1]);
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            return;
+    }
 }
